@@ -4,6 +4,7 @@ import { ThemeType as ThemeFolderType } from '@ant-design/icons/lib/types';
 import { Radio, Icon, Input } from 'antd';
 import { RadioChangeEvent } from 'antd/lib/radio/interface';
 import { injectIntl, InjectedIntlProps } from 'react-intl';
+import debounce from 'lodash/debounce';
 import Category from './Category';
 import { FilledIcon, OutlinedIcon, TwoToneIcon } from './themeIcons';
 import { categories, Categories, CategoriesKeys } from './fields';
@@ -17,6 +18,11 @@ interface IconDisplayState {
 }
 
 class IconDisplay extends React.Component<IconDisplayProps, IconDisplayState> {
+  constructor(props: IconDisplayProps) {
+    super(props);
+    this.handleSearchIcon = debounce(this.handleSearchIcon, 300);
+  }
+
   static cagetories: Categories = categories;
 
   static newIconNames: string[] = [];
@@ -49,11 +55,11 @@ class IconDisplay extends React.Component<IconDisplayProps, IconDisplayState> {
     });
   };
 
-  handleSearchIcon = (e: any) => {
-    this.setState({
-      ...this.state,
-      searchKey: e.currentTarget.value,
-    });
+  handleSearchIcon = (searchKey: string) => {
+    this.setState(prevState => ({
+      ...prevState,
+      searchKey,
+    }));
   };
 
   renderCategories(list: Array<{ category: CategoriesKeys; icons: string[] }>) {
@@ -86,7 +92,7 @@ class IconDisplay extends React.Component<IconDisplayProps, IconDisplayState> {
       <div>
         <h3>{messages['app.docs.components.icon.pick-theme']}</h3>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Radio.Group value={this.state.theme} onChange={this.handleChangeTheme}>
+          <Radio.Group value={this.state.theme} onChange={this.handleChangeTheme} size="large">
             <Radio.Button value="outlined">
               <Icon component={OutlinedIcon} /> {messages['app.docs.components.icon.outlined']}
             </Radio.Button>
@@ -97,11 +103,13 @@ class IconDisplay extends React.Component<IconDisplayProps, IconDisplayState> {
               <Icon component={TwoToneIcon} /> {messages['app.docs.components.icon.two-tone']}
             </Radio.Button>
           </Radio.Group>
+
           <Input.Search
-            style={{ width: 200 }}
             placeholder="icon name"
+            style={{ marginLeft: 10, flex: 1 }}
             allowClear
-            onChange={this.handleSearchIcon}
+            onChange={e => this.handleSearchIcon(e.currentTarget.value)}
+            size="large"
           />
         </div>
 
