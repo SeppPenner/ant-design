@@ -16,3 +16,7 @@ patch:
         patched: '2019-07-04T00:14:38.264Z'
     - rc-editor-mention > rc-editor-core > lodash:
         patched: '2019-07-04T00:14:38.264Z'
+    - snyk > snyk-mvn-plugin > lodash:
+        patched: '2019-07-10T07:38:20.030Z'
+    - snyk > snyk-php-plugin > @snyk/composer-lockfile-parser > lodash:
+        patched: '2019-07-10T07:38:20.030Z'
